@@ -1,4 +1,11 @@
 definitions:
+  model.UserLoginRequest:
+    properties:
+      password:
+        type: string
+      user_identity:
+        type: string
+    type: object
   model.UserRegisterRequest:
     properties:
       email:
@@ -23,6 +30,28 @@ info:
   title: ottojunior
   version: "1.0"
 paths:
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: login
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.UserLoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: logged in existing user
+      tags:
+      - example
   /register:
     post:
       consumes:

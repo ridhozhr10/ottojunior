@@ -61,3 +61,38 @@ func (ac *AuthController) HandleRegister(c *gin.Context) {
 		"data": res,
 	})
 }
+
+// HandleLogin godoc
+// @Summary logged in existing user
+// @Schemes
+// @Description login
+// @Tags example
+// @Accept json
+// @Produce json
+// @Param request body model.UserLoginRequest true "query params"
+// @Success 200 {string} Helloworld
+// @Router /login [post]
+// HandleRegister request
+func (ac *AuthController) HandleLogin(c *gin.Context) {
+	payload := model.UserLoginRequest{}
+	if err := c.ShouldBindJSON(&payload); err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"ok":  false,
+			"msg": err.Error(),
+		})
+		return
+	}
+	res, err := ac.AuthService.Login(payload)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			"ok":  false,
+			"msg": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"ok":   true,
+		"data": res,
+	})
+}

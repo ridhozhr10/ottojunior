@@ -45,8 +45,9 @@ func New(config Config) error {
 	authController := controller.NewAuthController(authService)
 
 	// Route
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler)) // docs
 	r.POST("/register", authController.HandleRegister)
+	r.POST("/login", authController.HandleLogin)
 
 	return r.Run(config.Port)
 }
