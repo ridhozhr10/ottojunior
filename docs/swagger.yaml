@@ -30,6 +30,23 @@ info:
   title: ottojunior
   version: "1.0"
 paths:
+  /account-info:
+    get:
+      consumes:
+      - application/json
+      description: get account information from logged in user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: get accountt information from logged in user
+      tags:
+      - example
   /login:
     post:
       consumes:
@@ -74,4 +91,9 @@ paths:
       summary: register new user
       tags:
       - example
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

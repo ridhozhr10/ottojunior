@@ -72,7 +72,6 @@ func (ac *AuthController) HandleRegister(c *gin.Context) {
 // @Param request body model.UserLoginRequest true "query params"
 // @Success 200 {string} Helloworld
 // @Router /login [post]
-// HandleRegister request
 func (ac *AuthController) HandleLogin(c *gin.Context) {
 	payload := model.UserLoginRequest{}
 	if err := c.ShouldBindJSON(&payload); err != nil {
@@ -95,4 +94,53 @@ func (ac *AuthController) HandleLogin(c *gin.Context) {
 		"ok":   true,
 		"data": res,
 	})
+}
+
+// HandleGetAccountInfo godoc
+// @Summary get accountt information from logged in user
+// @Schemes
+// @Description get account information from logged in user
+// @Tags example
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Success 200 {string} Helloworld
+// @Router /account-info [get]
+func (ac *AuthController) HandleGetAccountInfo(c *gin.Context) {
+	userID := c.GetInt("user_id")
+	user, err := ac.AuthService.GetAccountInfo(userID)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			"ok":  false,
+			"msg": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"ok":   true,
+		"data": user,
+	})
+}
+
+// AuthMiddleware for protecting us
+func (ac *AuthController) AuthMiddleware(c *gin.Context) {
+	token := c.Request.Header["Authorization"]
+	if len(token) < 1 {
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+			"ok":  false,
+			"msg": "unauthorized",
+		})
+		return
+	}
+	userID, err := ac.AuthService.DecodeToken(token[0])
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+			"ok":  false,
+			"msg": err.Error(),
+		})
+		return
+	}
+	c.Set("user_id", userID)
+	c.Next()
 }

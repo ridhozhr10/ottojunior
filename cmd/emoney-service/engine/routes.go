@@ -49,5 +49,8 @@ func New(config Config) error {
 	r.POST("/register", authController.HandleRegister)
 	r.POST("/login", authController.HandleLogin)
 
+	protectedRoute := r.Group("", authController.AuthMiddleware)
+	protectedRoute.GET("/account-info", authController.HandleGetAccountInfo)
+
 	return r.Run(config.Port)
 }

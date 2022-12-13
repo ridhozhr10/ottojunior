@@ -49,7 +49,7 @@ func (s *authServiceImpl) Login(payload model.UserLoginRequest) (model.UserLogin
 	// generate access token
 	token := jwt.New(jwt.SigningMethodHS256)
 	claims := token.Claims.(jwt.MapClaims)
-	claims["exp"] = time.Now().Add(10 * time.Minute) // 10 minute
+	claims["exp"] = time.Now().Add(10 * time.Minute).Unix() // 10 minute
 	claims["data"] = user
 	accessToken, err := token.SignedString(secretKey)
 	if err != nil {
@@ -59,7 +59,7 @@ func (s *authServiceImpl) Login(payload model.UserLoginRequest) (model.UserLogin
 	// generate refresh token
 	tokenRefresh := jwt.New(jwt.SigningMethodHS256)
 	claimsRefresh := tokenRefresh.Claims.(jwt.MapClaims)
-	claimsRefresh["exp"] = time.Now().Add(24 * 7 * time.Hour) // 1 week
+	claimsRefresh["exp"] = time.Now().Add(24 * 7 * time.Hour).Unix() // 1 week
 	claimsRefresh["data"] = user
 	refreshToken, err := tokenRefresh.SignedString(secretKey)
 	if err != nil {
@@ -71,6 +71,36 @@ func (s *authServiceImpl) Login(payload model.UserLoginRequest) (model.UserLogin
 	result.Data = user
 
 	return result, nil
+}
+
+func (s *authServiceImpl) DecodeToken(tokenRaw string) (int, error) {
+	token, err := jwt.Parse(
+		tokenRaw,
+		func(token *jwt.Token) (interface{}, error) {
+			_, ok := token.Method.(*jwt.SigningMethodHMAC)
+			if !ok {
+				return nil, errors.New("unauthorized")
+			}
+			return secretKey, nil
+		})
+	if err != nil {
+		return 0, err
+	}
+	if !token.Valid {
+		return 0, errors.New("unauthorized")
+	}
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return 0, errors.New("cant get claims")
+	}
+	user := claims["data"].(map[string]interface{})
+	id := user["ID"].(float64)
+	return int(id), nil
+}
+
+func (s *authServiceImpl) GetAccountInfo(userID int) (model.User, error) {
+	user, err := s.UserRepository.GetByID(userID)
+	return user, err
 }
 
 func (s *authServiceImpl) hashPass(pass string) (string, error) {

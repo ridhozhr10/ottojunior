@@ -74,6 +74,9 @@ func init() {
 // @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
 
 // @host      localhost:3000
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 func main() {
 	app := cli.App{
 		Name: "emoney-service",
