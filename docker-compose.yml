@@ -16,6 +16,48 @@ services:
     networks:
       - postgres
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  migration:
+    container_name: migration
+    build: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: migrate
+    environment:
+      DB_HOST: postgres
+    networks:
+      - postgres
+  emoney_svc:
+    container_name: emoney-service-container
+    build: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: serve-emoney
+    environment:
+      DB_HOST: postgres
+    networks:
+      - postgres
+    ports:
+      - "3000:3000"
+  topup_svc:
+    container_name: topup-service-container
+    build: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: serve-topup --port :3001
+    environment:
+      DB_HOST: postgres
+    networks:
+      - postgres
+    ports:
+      - "3001:3001"
   
 networks:
   postgres:
