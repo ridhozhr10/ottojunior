@@ -20,7 +20,7 @@ func (r *transactionPsqlRepository) Create(payload model.Transaction) (model.Tra
 	return payload, result.Error
 }
 
-func (r *transactionPsqlRepository) GetByID(userID int) ([]model.Transaction, error) {
+func (r *transactionPsqlRepository) GetByUserID(userID int) ([]model.Transaction, error) {
 	transactions := []model.Transaction{}
 	err := r.DB.Where("user_id = ?", userID).Find(&transactions).Error
 	return transactions, err

@@ -8,6 +8,7 @@ import (
 	"github.com/ridhozhr10/ottojunior/internal/service/auth"
 	"github.com/ridhozhr10/ottojunior/internal/service/balance"
 	"github.com/ridhozhr10/ottojunior/internal/service/product"
+	"github.com/ridhozhr10/ottojunior/internal/service/transaction"
 	"github.com/ridhozhr10/ottojunior/pkg/database"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -42,17 +43,25 @@ func New(config Config) error {
 	// Repository
 	userRepository := psql.NewUserPsqlRepository(db)
 	balanceRepository := psql.NewBalancePsqlRepository(db)
+	transactionRepository := psql.NewTransactionPsqlRepository(db)
 	productRepository := httpapi.NewProductHttpapiRepository(config.BillerServiceBaseURL)
 
 	// Service
 	authService := auth.NewService(userRepository, balanceRepository)
 	balanceService := balance.NewService(balanceRepository)
 	productService := product.NewService(productRepository)
+	transactionService := transaction.NewService(
+		balanceRepository,
+		transactionRepository,
+		userRepository,
+		productRepository,
+	)
 
 	// Controller
 	authController := controller.NewAuthController(authService)
 	balanceController := controller.NewBalanceController(balanceService)
 	productController := controller.NewProductController(productService)
+	transactionController := controller.NewTransactionController(transactionService)
 
 	// Route
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler)) // docs
@@ -63,6 +72,8 @@ func New(config Config) error {
 	protectedRoute.GET("/account-info", authController.HandleGetAccountInfo)
 	protectedRoute.GET("/balance", balanceController.HandleGetBalance)
 	protectedRoute.GET("/product", productController.HandleGetProduct)
+	protectedRoute.GET("/transaction", transactionController.HandleGetTransaction)
+	protectedRoute.POST("/confirm-transaction", transactionController.HandleConfirmTransaction)
 
 	return r.Run(config.Port)
 }

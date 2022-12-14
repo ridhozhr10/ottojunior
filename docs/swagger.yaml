@@ -1,4 +1,11 @@
 definitions:
+  model.ConfirmTransactionRequest:
+    properties:
+      amount:
+        type: integer
+      product_id:
+        type: integer
+    type: object
   model.TopupBalanceRequest:
     properties:
       amount:
@@ -68,6 +75,32 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: get latest balance from logged in user
+      tags:
+      - emoney-service
+  /confirm-transaction:
+    post:
+      consumes:
+      - application/json
+      description: handle get request transaction
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/model.ConfirmTransactionRequest'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: handle get request transaction
       tags:
       - emoney-service
   /login:
@@ -153,6 +186,23 @@ paths:
       summary: handle new topup balance
       tags:
       - topup-service
+  /transaction:
+    get:
+      consumes:
+      - application/json
+      description: handle get request transaction
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: handle get request transaction
+      tags:
+      - emoney-service
 securityDefinitions:
   ApiKeyAuth:
     in: header
