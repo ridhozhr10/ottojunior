@@ -18,6 +18,10 @@ $ docker-compose pull
 $ docker-compose build
 $ docker-compose up
 ```
+if some service didn't start (possibily caused of postgres raced with other services). please re run command
+```
+$ docker-compose up
+```
 
 once app already started you can access
 - emoney-service (http://localhost:3000/swagger/index.html)
