@@ -5,6 +5,7 @@ import (
 	"github.com/ridhozhr10/ottojunior/internal/controller"
 	"github.com/ridhozhr10/ottojunior/internal/repository/psql"
 	"github.com/ridhozhr10/ottojunior/internal/service/auth"
+	"github.com/ridhozhr10/ottojunior/internal/service/balance"
 	"github.com/ridhozhr10/ottojunior/pkg/database"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -41,9 +42,11 @@ func New(config Config) error {
 
 	// Service
 	authService := auth.NewService(userRepository, balanceRepository)
+	balanceService := balance.NewService(balanceRepository)
 
 	// Controller
 	authController := controller.NewAuthController(authService)
+	balanceController := controller.NewBalanceController(balanceService)
 
 	// Route
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler)) // docs
@@ -52,6 +55,7 @@ func New(config Config) error {
 
 	protectedRoute := r.Group("", authController.AuthMiddleware)
 	protectedRoute.GET("/account-info", authController.HandleGetAccountInfo)
+	protectedRoute.GET("/balance", balanceController.HandleGetBalance)
 
 	return r.Run(config.Port)
 }

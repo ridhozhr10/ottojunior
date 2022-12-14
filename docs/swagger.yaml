@@ -47,6 +47,23 @@ paths:
       summary: get accountt information from logged in user
       tags:
       - example
+  /balance:
+    get:
+      consumes:
+      - application/json
+      description: get latest balance from logged in user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: get latest balance from logged in user
+      tags:
+      - example
   /login:
     post:
       consumes:
