@@ -11,7 +11,6 @@
         },
         "version": "1.0"
     },
-    "host": "localhost:3000",
     "paths": {
         "/account-info": {
             "get": {
@@ -28,7 +27,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "example"
+                    "emoney-service"
                 ],
                 "summary": "get accountt information from logged in user",
                 "responses": {
@@ -56,7 +55,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "example"
+                    "emoney-service"
                 ],
                 "summary": "get latest balance from logged in user",
                 "responses": {
@@ -79,7 +78,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "example"
+                    "emoney-service"
                 ],
                 "summary": "logged in existing user",
                 "parameters": [
@@ -118,7 +117,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "example"
+                    "emoney-service"
                 ],
                 "summary": "get all available product to buy",
                 "responses": {
@@ -141,7 +140,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "example"
+                    "emoney-service"
                 ],
                 "summary": "register new user",
                 "parameters": [
@@ -164,9 +163,54 @@
                     }
                 }
             }
+        },
+        "/topup": {
+            "post": {
+                "description": "handle new topup balance",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "topup-service"
+                ],
+                "summary": "handle new topup balance",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.TopupBalanceRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "model.TopupBalanceRequest": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "integer"
+                },
+                "phone_number": {
+                    "type": "string"
+                }
+            }
+        },
         "model.UserLoginRequest": {
             "type": "object",
             "properties": {

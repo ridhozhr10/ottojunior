@@ -7,4 +7,5 @@ type User interface {
 	GetByUsernameEmail(string) (model.User, error)
 	Create(model.User) (model.User, error)
 	GetByID(int) (model.User, error)
+	GetByPhoneNumber(string) (model.User, error)
 }

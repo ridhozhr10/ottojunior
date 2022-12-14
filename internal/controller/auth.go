@@ -24,7 +24,7 @@ func NewAuthController(
 // @Summary register new user
 // @Schemes
 // @Description register new user
-// @Tags example
+// @Tags emoney-service
 // @Accept json
 // @Produce json
 // @Param request body model.UserRegisterRequest true "query params"
@@ -66,7 +66,7 @@ func (ac *AuthController) HandleRegister(c *gin.Context) {
 // @Summary logged in existing user
 // @Schemes
 // @Description login
-// @Tags example
+// @Tags emoney-service
 // @Accept json
 // @Produce json
 // @Param request body model.UserLoginRequest true "query params"
@@ -100,7 +100,7 @@ func (ac *AuthController) HandleLogin(c *gin.Context) {
 // @Summary get accountt information from logged in user
 // @Schemes
 // @Description get account information from logged in user
-// @Tags example
+// @Tags emoney-service
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth

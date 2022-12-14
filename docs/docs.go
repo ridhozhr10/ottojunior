@@ -36,7 +36,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "example"
+                    "emoney-service"
                 ],
                 "summary": "get accountt information from logged in user",
                 "responses": {
@@ -64,7 +64,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "example"
+                    "emoney-service"
                 ],
                 "summary": "get latest balance from logged in user",
                 "responses": {
@@ -87,7 +87,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "example"
+                    "emoney-service"
                 ],
                 "summary": "logged in existing user",
                 "parameters": [
@@ -126,7 +126,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "example"
+                    "emoney-service"
                 ],
                 "summary": "get all available product to buy",
                 "responses": {
@@ -149,7 +149,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "example"
+                    "emoney-service"
                 ],
                 "summary": "register new user",
                 "parameters": [
@@ -172,9 +172,54 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/topup": {
+            "post": {
+                "description": "handle new topup balance",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "topup-service"
+                ],
+                "summary": "handle new topup balance",
+                "parameters": [
+                    {
+                        "description": "query params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.TopupBalanceRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "model.TopupBalanceRequest": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "integer"
+                },
+                "phone_number": {
+                    "type": "string"
+                }
+            }
+        },
         "model.UserLoginRequest": {
             "type": "object",
             "properties": {
@@ -219,7 +264,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:3000",
+	Host:             "",
 	BasePath:         "",
 	Schemes:          []string{},
 	Title:            "ottojunior",

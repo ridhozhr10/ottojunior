@@ -1,4 +1,11 @@
 definitions:
+  model.TopupBalanceRequest:
+    properties:
+      amount:
+        type: integer
+      phone_number:
+        type: string
+    type: object
   model.UserLoginRequest:
     properties:
       password:
@@ -19,7 +26,6 @@ definitions:
       username:
         type: string
     type: object
-host: localhost:3000
 info:
   contact: {}
   description: ridho otto junior
@@ -46,7 +52,7 @@ paths:
       - ApiKeyAuth: []
       summary: get accountt information from logged in user
       tags:
-      - example
+      - emoney-service
   /balance:
     get:
       consumes:
@@ -63,7 +69,7 @@ paths:
       - ApiKeyAuth: []
       summary: get latest balance from logged in user
       tags:
-      - example
+      - emoney-service
   /login:
     post:
       consumes:
@@ -85,7 +91,7 @@ paths:
             type: string
       summary: logged in existing user
       tags:
-      - example
+      - emoney-service
   /product:
     get:
       consumes:
@@ -102,7 +108,7 @@ paths:
       - ApiKeyAuth: []
       summary: get all available product to buy
       tags:
-      - example
+      - emoney-service
   /register:
     post:
       consumes:
@@ -124,7 +130,29 @@ paths:
             type: string
       summary: register new user
       tags:
-      - example
+      - emoney-service
+  /topup:
+    post:
+      consumes:
+      - application/json
+      description: handle new topup balance
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.TopupBalanceRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: handle new topup balance
+      tags:
+      - topup-service
 securityDefinitions:
   ApiKeyAuth:
     in: header

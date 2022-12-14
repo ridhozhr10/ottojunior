@@ -21,7 +21,7 @@ func NewBalanceController(BalanceService balance.Service) *BalanceController {
 // @Summary get latest balance from logged in user
 // @Schemes
 // @Description get latest balance from logged in user
-// @Tags example
+// @Tags emoney-service
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth

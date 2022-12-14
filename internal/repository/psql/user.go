@@ -31,3 +31,9 @@ func (p *userPsqlRepository) GetByID(id int) (model.User, error) {
 	err := p.DB.First(&user, id).Error
 	return user, err
 }
+
+func (p *userPsqlRepository) GetByPhoneNumber(phoneNumber string) (model.User, error) {
+	user := model.User{}
+	err := p.DB.Where("phone_number = ?", phoneNumber).First(&user).Error
+	return user, err
+}

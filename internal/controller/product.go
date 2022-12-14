@@ -21,7 +21,7 @@ func NewProductController(ProductService product.Service) *ProductController {
 // @Summary get all available product to buy
 // @Schemes
 // @Description get all available product to buy
-// @Tags example
+// @Tags emoney-service
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth

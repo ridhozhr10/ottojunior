@@ -5,8 +5,9 @@ import (
 
 	"github.com/ridhozhr10/ottojunior/cmd/emoney-service/cliaction"
 	"github.com/ridhozhr10/ottojunior/cmd/emoney-service/engine"
+	engineTopup "github.com/ridhozhr10/ottojunior/cmd/topup-service/engine"
 
-	_ "github.com/ridhozhr10/ottojunior/docs"
+	"github.com/ridhozhr10/ottojunior/docs"
 	log "github.com/sirupsen/logrus"
 	"github.com/urfave/cli/v2"
 )
@@ -73,7 +74,6 @@ func init() {
 // @license.name  Apache 2.0
 // @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
 
-// @host      localhost:3000
 // @securityDefinitions.apikey ApiKeyAuth
 // @in header
 // @name Authorization
@@ -95,7 +95,25 @@ func main() {
 						Port:                 c.String("port"),
 						BillerServiceBaseURL: c.String("biller-service-base-url"),
 					}
+					docs.SwaggerInfo.Host = "localhost:3000"
 					return engine.New(config)
+				},
+			},
+			{
+				Name:  "serve-topup",
+				Usage: "serve http api servers",
+				Flags: flags,
+				Action: func(c *cli.Context) error {
+					config := engineTopup.Config{
+						DBHost: c.String("db-host"),
+						DBUser: c.String("db-user"),
+						DBPass: c.String("db-pass"),
+						DBPort: c.String("db-port"),
+						DBName: c.String("db-name"),
+						Port:   c.String("port"),
+					}
+					docs.SwaggerInfo.Host = "localhost:3001"
+					return engineTopup.New(config)
 				},
 			},
 			{
