@@ -37,9 +37,10 @@ func New(config Config) error {
 	}
 	// Repository
 	userRepository := psql.NewUserPsqlRepository(db)
+	balanceRepository := psql.NewBalancePsqlRepository(db)
 
 	// Service
-	authService := auth.NewService(userRepository)
+	authService := auth.NewService(userRepository, balanceRepository)
 
 	// Controller
 	authController := controller.NewAuthController(authService)

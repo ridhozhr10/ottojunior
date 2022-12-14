@@ -13,14 +13,19 @@ import (
 var secretKey = []byte("your-secret-key")
 
 type authServiceImpl struct {
-	UserRepository repository.User
+	UserRepository    repository.User
+	BalanceRepository repository.Balance
 }
 
 // NewService crete implementation for auth.Service
 func NewService(
 	UserRepository repository.User,
+	BalanceRepository repository.Balance,
 ) Service {
-	return &authServiceImpl{UserRepository}
+	return &authServiceImpl{
+		UserRepository,
+		BalanceRepository,
+	}
 }
 
 func (s *authServiceImpl) Register(payload model.User) (model.User, error) {
@@ -31,6 +36,13 @@ func (s *authServiceImpl) Register(payload model.User) (model.User, error) {
 	payload.Password = pass
 	user, err := s.UserRepository.Create(payload)
 	if err != nil {
+		return user, err
+	}
+	balance := model.Balance{
+		Total:  0,
+		UserID: int(user.ID),
+	}
+	if _, err := s.BalanceRepository.Create(balance); err != nil {
 		return user, err
 	}
 	return user, nil
