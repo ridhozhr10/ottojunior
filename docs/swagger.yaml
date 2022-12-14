@@ -86,6 +86,23 @@ paths:
       summary: logged in existing user
       tags:
       - example
+  /product:
+    get:
+      consumes:
+      - application/json
+      description: get all available product to buy
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: get all available product to buy
+      tags:
+      - example
   /register:
     post:
       consumes:

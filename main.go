@@ -87,12 +87,13 @@ func main() {
 				Flags: flags,
 				Action: func(c *cli.Context) error {
 					config := engine.Config{
-						DBHost: c.String("db-host"),
-						DBUser: c.String("db-user"),
-						DBPass: c.String("db-pass"),
-						DBPort: c.String("db-port"),
-						DBName: c.String("db-name"),
-						Port:   c.String("port"),
+						DBHost:               c.String("db-host"),
+						DBUser:               c.String("db-user"),
+						DBPass:               c.String("db-pass"),
+						DBPort:               c.String("db-port"),
+						DBName:               c.String("db-name"),
+						Port:                 c.String("port"),
+						BillerServiceBaseURL: c.String("biller-service-base-url"),
 					}
 					return engine.New(config)
 				},
