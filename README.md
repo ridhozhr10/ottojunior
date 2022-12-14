@@ -27,3 +27,7 @@ once app already started you can access
 - emoney-service (http://localhost:3000/swagger/index.html)
 - topup-service (http://localhost:3001/swagger/index.html)
 
+to fully closed the apps, please run 
+```
+$ docker-compose down
+```
